@@ -26,6 +26,7 @@ export default class EditableTable extends Component {
     this.state = {
       dataSource: generatorData(),
     };
+    console.log(this.state.dataSource);
   }
 
   renderOrder = (value, index) => {
@@ -48,13 +49,14 @@ export default class EditableTable extends Component {
   };
 
   changeDataSource = (index, valueKey, value) => {
-    this.state.dataSource[index][valueKey] = value;
+    this.props.data[index][valueKey] = value;
     this.setState({
       dataSource: this.state.dataSource,
     });
   };
 
   renderEditor = (valueKey, value, index, record) => {
+    console.log(valueKey, value, index, record);
     return (
       <CellEditor
         valueKey={valueKey}
@@ -77,50 +79,51 @@ export default class EditableTable extends Component {
   // };
 
   render() {
+    console.log('test', this.props.data);
     return (
       <div className="editable-table">
         <IceContainer>
-          <Table dataSource={this.state.dataSource} hasBorder={false}>
-            <Table.Column width={80} title="顺序" cell={this.renderOrder} />
+          <Table dataSource={this.props.data} hasBorder={false}>
+            {/* <Table.Column width={80} title="顺序" cell={this.renderOrder} /> */}
             <Table.Column
-              width={280}
+              width={80}
               title="序号"
-              cell={this.renderEditor.bind(this, 'todo')}
+              cell={this.renderEditor.bind(this, 'id')}
             />
             <Table.Column
               width={240}
               title="书名"
-              cell={this.renderEditor.bind(this, 'memo')}
+              cell={this.renderEditor.bind(this, 'name')}
             />
             <Table.Column
               width={180}
               title="作者"
-              cell={this.renderEditor.bind(this, 'validity')}
+              cell={this.renderEditor.bind(this, 'writer')}
             />
             <Table.Column
               width={180}
               title="出版社"
-              cell={this.renderEditor.bind(this, 'validity')}
+              cell={this.renderEditor.bind(this, 'publisher')}
             />
             <Table.Column
-              width={180}
+              width={80}
               title="馆藏"
-              cell={this.renderEditor.bind(this, 'validity')}
+              cell={this.renderEditor.bind(this, 'total_number')}
             />
             <Table.Column
-              width={180}
+              width={80}
               title="在馆"
-              cell={this.renderEditor.bind(this, 'validity')}
+              cell={this.renderEditor.bind(this, 'available_number')}
             />
             <Table.Column
               width={180}
               title="录入日期"
-              cell={this.renderEditor.bind(this, 'validity')}
+              cell={this.renderEditor.bind(this, 'date')}
             />
             <Table.Column
-              width={180}
+              width={80}
               title="价格"
-              cell={this.renderEditor.bind(this, 'validity')}
+              cell={this.renderEditor.bind(this, 'price')}
             />
             <Table.Column title="操作" width={80} cell={this.renderOperation} />
           </Table>

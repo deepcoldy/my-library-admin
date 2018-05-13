@@ -52,5 +52,11 @@
     "title": "ICE Design Lite",
     "screenshot": "https://img.alicdn.com/tfs/TB1IM1JmuuSBuNjy1XcXXcYjFXa-1920-1080.png"
   },
-  "title": "my-library-admin"
+  "title": "my-library-admin",
+  "proxyConfig": {
+    "/api/**": {
+      "enable": true,
+      "target": "http://127.0.0.1:7001"
+    }
+  }
 }

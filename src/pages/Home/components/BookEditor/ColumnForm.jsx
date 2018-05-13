@@ -6,6 +6,7 @@ import {
   FormError as IceFormError,
 } from '@icedesign/form-binder';
 import { Input, Button, Select, Grid } from '@icedesign/base';
+import axios from 'axios';
 
 const { Row, Col } = Grid;
 
@@ -20,11 +21,11 @@ export default class ColumnForm extends Component {
     super(props);
     this.state = {
       value: {
-        contractId: '',
-        operator: '',
-        settleAccount: '',
-        period: '',
-        currency: 'usd',
+        name: '',
+        writer: '',
+        publisher: '',
+        totalNumber: '',
+        price: '',
       },
     };
   }
@@ -38,21 +39,36 @@ export default class ColumnForm extends Component {
   reset = () => {
     this.setState({
       value: {
-        contractId: '',
-        operator: '',
-        settleAccount: '',
-        period: '',
-        currency: 'usd',
+        name: '',
+        writer: '',
+        publisher: '',
+        totalNumber: '',
+        price: '',
       },
     });
   };
 
   submit = () => {
-    this.formRef.validateAll((error, value) => {
-      console.log('error', error, 'value', value);
+    this.formRef.validateAll((error, {
+      name,
+      writer,
+      publisher,
+      totalNumber,
+      price,
+    }) => {
       if (error) {
         // 处理表单报错
+        return;
       }
+      axios.post('/api/books/add', {
+        name,
+        writer,
+        publisher,
+        total_number: totalNumber,
+        price,
+      }).then((resp) => {
+        console.log(resp);
+      });
       // 提交当前填写的数据
     });
   };
@@ -60,7 +76,7 @@ export default class ColumnForm extends Component {
   render() {
     return (
       <div className="column-form">
-        <IceContainer title="运营商录入" style={styles.container}>
+        <IceContainer title="书籍" style={styles.container}>
           <IceFormBinderWrapper
             ref={(formRef) => {
               this.formRef = formRef;
@@ -73,40 +89,56 @@ export default class ColumnForm extends Component {
                 <Col xxs="24" s="12" l="12">
                   <Row style={styles.formItem}>
                     <Col xxs="8" s="6" l="4" style={styles.formLabel}>
-                      合同编号：
+                      书名：
                     </Col>
 
                     <Col s="12" l="12">
                       <IceFormBinder
-                        name="contractId"
+                        name="name"
                         required
-                        message="合同编号必须填写"
+                        message="书名必须填写"
                       >
                         <Input style={{ width: '100%' }} />
                       </IceFormBinder>
-                      <IceFormError name="contractId" />
+                      <IceFormError name="name" />
                     </Col>
                   </Row>
 
                   <Row style={styles.formItem}>
                     <Col xxs="8" s="6" l="4" style={styles.formLabel}>
-                      签约运营商：
+                      作者：
                     </Col>
                     <Col s="12" l="12">
                       <IceFormBinder
-                        name="operator"
+                        name="writer"
                         required
-                        message="签约运营商必须填写"
+                        message="作者必须填写"
                       >
                         <Input style={{ width: '100%' }} />
                       </IceFormBinder>
-                      <IceFormError name="operator" />
+                      <IceFormError name="writer" />
                     </Col>
                   </Row>
 
                   <Row style={styles.formItem}>
                     <Col xxs="8" s="6" l="4" style={styles.formLabel}>
-                      计费周期：
+                      出版社：
+                    </Col>
+                    <Col s="12" l="12">
+                      <IceFormBinder
+                        name="publisher"
+                        required
+                        message="出版社必须填写"
+                      >
+                        <Input style={{ width: '100%' }} />
+                      </IceFormBinder>
+                      <IceFormError name="publisher" />
+                    </Col>
+                  </Row>
+
+                  {/* <Row style={styles.formItem}>
+                    <Col xxs="8" s="6" l="4" style={styles.formLabel}>
+                      出版社：
                     </Col>
                     <Col s="12" l="12">
                       <IceFormBinder name="period">
@@ -124,42 +156,40 @@ export default class ColumnForm extends Component {
                       </IceFormBinder>
                       <IceFormError name="period" />
                     </Col>
-                  </Row>
+                  </Row> */}
                 </Col>
 
                 <Col xxs="24" s="12" l="12">
                   <Row style={styles.formItem}>
                     <Col xxs="8" s="6" l="4" style={styles.formLabel}>
-                      结算运营商：
+                      馆藏总数：
                     </Col>
 
                     <Col s="12" l="12">
                       <IceFormBinder
-                        name="settleAccount"
+                        name="totalNumber"
                         required
-                        message="结算运营商必须填写"
+                        message="馆藏总数必须填写"
                       >
                         <Input style={{ width: '100%' }} />
                       </IceFormBinder>
-                      <IceFormError name="settleAccount" />
+                      <IceFormError name="totalNumber" />
                     </Col>
                   </Row>
-
                   <Row style={styles.formItem}>
                     <Col xxs="8" s="6" l="4" style={styles.formLabel}>
-                      币种：
+                      价格：
                     </Col>
+
                     <Col s="12" l="12">
-                      <IceFormBinder name="currency">
-                        <Select
-                          className="next-form-text-align"
-                          style={{ width: '100%' }}
-                          dataSource={[
-                            { label: '美元', value: 'usd' },
-                            { label: '人民币', value: 'rmb' },
-                          ]}
-                        />
+                      <IceFormBinder
+                        name="price"
+                        required
+                        message="价格必须填写"
+                      >
+                        <Input style={{ width: '100%' }} />
                       </IceFormBinder>
+                      <IceFormError name="price" />
                     </Col>
                   </Row>
                 </Col>
@@ -171,7 +201,7 @@ export default class ColumnForm extends Component {
                 </Col>
                 <Col s="12" l="10">
                   <Button type="primary" onClick={this.submit}>
-                    立即创建
+                    添加书籍
                   </Button>
                   <Button style={styles.resetBtn} onClick={this.reset}>
                     重置

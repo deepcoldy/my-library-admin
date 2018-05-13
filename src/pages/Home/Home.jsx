@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import { Table } from '@icedesign/base';
+import axios from 'axios';
 import EditableTable from './components/EditableTable';
 import BookEditor from './components/BookEditor';
 
@@ -11,6 +12,16 @@ export default class Home extends Component {
     this.state = {
       data: [],
     };
+    this.getAllBooks();
+  }
+
+  getAllBooks = () => {
+    axios.get('/api/books').then((resp) => {
+      console.log(resp);
+      this.setState({
+        data: resp.data,
+      });
+    });
   }
 
   render() {
@@ -28,7 +39,7 @@ export default class Home extends Component {
           <Table.Column title="价格" dataIndex="price" />
         </Table> */}
         <BookEditor />
-        <EditableTable />
+        <EditableTable data={this.state.data} />
       </div>
     );
   }
