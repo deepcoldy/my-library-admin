@@ -5,8 +5,7 @@ import {
   FormBinder as IceFormBinder,
   FormError as IceFormError,
 } from '@icedesign/form-binder';
-import { Input, Button, Select, Grid } from '@icedesign/base';
-import axios from 'axios';
+import { Input, Button, Grid } from '@icedesign/base';
 
 const { Row, Col } = Grid;
 

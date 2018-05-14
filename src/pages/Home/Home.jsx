@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Table } from '@icedesign/base';
+import { Feedback } from '@icedesign/base';
 import axios from 'axios';
 import EditableTable from './components/EditableTable';
 import BookEditor from './components/BookEditor';
@@ -38,6 +38,7 @@ export default class Home extends Component {
       total_number: totalNumber,
       price,
     }).then((resp) => {
+      Feedback.toast.success('添加成功');
       console.log(resp);
       this.setState({
         data: [
@@ -52,6 +53,7 @@ export default class Home extends Component {
     axios.post('/api/books/edit', {
       id, valueKey, value,
     }).then((resp) => {
+      Feedback.toast.success('编辑成功');
       console.log(resp);
       this.setState({
         data: this.state.data.map((item) => {
@@ -66,6 +68,7 @@ export default class Home extends Component {
     axios.get('/api/books/delete', {
       params: { id },
     }).then(() => {
+      Feedback.toast.success('删除成功');
       const result = [];
       this.state.data.map((item) => {
         if (item.id !== id) result.push(item);

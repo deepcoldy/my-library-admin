@@ -110,13 +110,13 @@ export default class UserLogin extends Component {
                   </Col>
                 </Row>
 
-                <Row style={styles.formItem}>
+                {/* <Row style={styles.formItem}>
                   <Col>
                     <IceFormBinder name="checkbox">
                       <Checkbox style={styles.checkbox}>记住账号</Checkbox>
                     </IceFormBinder>
                   </Col>
-                </Row>
+                </Row> */}
 
                 <Row style={styles.formItem}>
                   <Button
@@ -128,7 +128,7 @@ export default class UserLogin extends Component {
                   </Button>
                 </Row>
 
-                <Row className="tips" style={styles.tips}>
+                {/* <Row className="tips" style={styles.tips}>
                   <a href="/" style={styles.link}>
                     立即注册
                   </a>
@@ -136,7 +136,7 @@ export default class UserLogin extends Component {
                   <a href="/" style={styles.link}>
                     忘记密码
                   </a>
-                </Row>
+                </Row> */}
               </div>
             </IceFormBinderWrapper>
           </div>
