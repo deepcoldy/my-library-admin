@@ -40,7 +40,7 @@ export default class EditableTable extends Component {
     }, () => {
       setTimeout(() => {
         const qrcode = new QRCode(document.getElementById('qrcode'), {
-          text: `http://library.iscode.cn/#/borrow?id=${id}`,
+          text: `http://library.iscode.cn/#/BookDetail?id=${id}`,
           width: 128,
           height: 128,
           colorDark: '#000000',
