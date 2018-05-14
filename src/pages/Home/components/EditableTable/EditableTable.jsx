@@ -23,7 +23,7 @@ export default class EditableTable extends Component {
     console.log(value, index, item);
     return (
       <div>
-        <Button onClick={this.props.deleteBooks.bind(this, item.id)} shape="text">
+        <Button onClick={this.props.deleteBook.bind(this, item.id)} shape="text">
           删除
         </Button>
         <span>&nbsp;&nbsp;&nbsp;</span>
@@ -57,7 +57,7 @@ export default class EditableTable extends Component {
         valueKey={valueKey}
         id={record.id}
         value={record[valueKey]}
-        onChange={this.props.editBooks}
+        onChange={this.props.editBook}
         allowEdit={valueKey !== 'id'}
       />
     );

@@ -49,25 +49,13 @@ export default class ColumnForm extends Component {
   };
 
   submit = () => {
-    this.formRef.validateAll((error, {
-      name,
-      writer,
-      publisher,
-      totalNumber,
-      price,
-    }) => {
+    this.formRef.validateAll((error, data) => {
       if (error) {
         // 处理表单报错
         return;
       }
-      axios.post('/api/books/add', {
-        name,
-        writer,
-        publisher,
-        total_number: totalNumber,
-        price,
-      }).then((resp) => {
-        console.log(resp);
+      this.props.addBook(data).then(() => {
+        this.reset();
       });
       // 提交当前填写的数据
     });

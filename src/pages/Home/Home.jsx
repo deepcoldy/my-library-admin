@@ -24,7 +24,31 @@ export default class Home extends Component {
     });
   }
 
-  editBooks = (id, valueKey, value) => {
+  addBook = ({
+    name,
+    writer,
+    publisher,
+    totalNumber,
+    price,
+  }) => {
+    return axios.post('/api/books/add', {
+      name,
+      writer,
+      publisher,
+      total_number: totalNumber,
+      price,
+    }).then((resp) => {
+      console.log(resp);
+      this.setState({
+        data: [
+          resp.data[0],
+          ...this.state.data,
+        ],
+      });
+    });
+  }
+
+  editBook = (id, valueKey, value) => {
     axios.post('/api/books/edit', {
       id, valueKey, value,
     }).then((resp) => {
@@ -38,7 +62,7 @@ export default class Home extends Component {
     });
   }
 
-  deleteBooks = (id) => {
+  deleteBook = (id) => {
     axios.get('/api/books/delete', {
       params: { id },
     }).then(() => {
@@ -67,11 +91,13 @@ export default class Home extends Component {
           <Table.Column title="录入日期" dataIndex="date" />
           <Table.Column title="价格" dataIndex="price" />
         </Table> */}
-        <BookEditor />
+        <BookEditor
+          addBook={this.addBook}
+        />
         <EditableTable
           data={this.state.data}
-          deleteBooks={this.deleteBooks}
-          editBooks={this.editBooks}
+          deleteBook={this.deleteBook}
+          editBook={this.editBook}
         />
       </div>
     );
