@@ -24,6 +24,35 @@ export default class Home extends Component {
     });
   }
 
+  editBooks = (id, valueKey, value) => {
+    axios.post('/api/books/edit', {
+      id, valueKey, value,
+    }).then((resp) => {
+      console.log(resp);
+      this.setState({
+        data: this.state.data.map((item) => {
+          if (item.id === id) item[valueKey] = value;
+          return item;
+        }),
+      });
+    });
+  }
+
+  deleteBooks = (id) => {
+    axios.get('/api/books/delete', {
+      params: { id },
+    }).then(() => {
+      const result = [];
+      this.state.data.map((item) => {
+        if (item.id !== id) result.push(item);
+        return false;
+      });
+      this.setState({
+        data: result,
+      });
+    });
+  }
+
   render() {
     return (
       <div>
@@ -39,7 +68,11 @@ export default class Home extends Component {
           <Table.Column title="价格" dataIndex="price" />
         </Table> */}
         <BookEditor />
-        <EditableTable data={this.state.data} />
+        <EditableTable
+          data={this.state.data}
+          deleteBooks={this.deleteBooks}
+          editBooks={this.editBooks}
+        />
       </div>
     );
   }

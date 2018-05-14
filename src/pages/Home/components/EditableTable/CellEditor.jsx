@@ -41,9 +41,9 @@ export default class CellEditor extends Component {
     this.setState({
       editMode: false,
     });
-    const { index, valueKey } = this.props;
+    const { id, valueKey } = this.props;
     const { value } = this.state;
-    this.props.onChange && this.props.onChange(index, valueKey, value);
+    this.props.onChange && this.props.onChange(id, valueKey, value);
   };
 
   rollBackThisCell = () => {
@@ -86,7 +86,12 @@ export default class CellEditor extends Component {
       <div className="celleditor">
         <span>{value}</span>
         <span
-          style={styles.operationIcon}
+          style={
+            {
+              ...styles.operationIcon,
+              display: this.props.allowEdit ? '' : 'none',
+            }
+          }
           className="celleditor-trigger"
           title="编辑"
           onClick={this.editThisCell}

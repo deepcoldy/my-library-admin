@@ -135,28 +135,6 @@ export default class ColumnForm extends Component {
                       <IceFormError name="publisher" />
                     </Col>
                   </Row>
-
-                  {/* <Row style={styles.formItem}>
-                    <Col xxs="8" s="6" l="4" style={styles.formLabel}>
-                      出版社：
-                    </Col>
-                    <Col s="12" l="12">
-                      <IceFormBinder name="period">
-                        <Select
-                          className="next-form-text-align"
-                          style={{ width: '100%' }}
-                          required
-                          message="请选择计费周期"
-                          dataSource={[
-                            { label: '按月结算', value: 'month' },
-                            { label: '按季度结算', value: 'season' },
-                            { label: '按年结算', value: 'year' },
-                          ]}
-                        />
-                      </IceFormBinder>
-                      <IceFormError name="period" />
-                    </Col>
-                  </Row> */}
                 </Col>
 
                 <Col xxs="24" s="12" l="12">
@@ -169,7 +147,7 @@ export default class ColumnForm extends Component {
                       <IceFormBinder
                         name="totalNumber"
                         required
-                        message="馆藏总数必须填写"
+                        message="请正确填写馆藏数量"
                       >
                         <Input style={{ width: '100%' }} />
                       </IceFormBinder>
@@ -185,7 +163,7 @@ export default class ColumnForm extends Component {
                       <IceFormBinder
                         name="price"
                         required
-                        message="价格必须填写"
+                        message="请正确填写价格"
                       >
                         <Input style={{ width: '100%' }} />
                       </IceFormBinder>

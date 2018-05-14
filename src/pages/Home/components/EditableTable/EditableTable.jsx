@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container';
-import { Table, Button } from '@icedesign/base';
+import { Table, Button, Overlay } from '@icedesign/base';
+import QRCode from 'qrcodejs2';
 import CellEditor from './CellEditor';
 import './EditableTable.scss';
-
-const generatorData = () => {
-  return Array.from({ length: 5 }).map((item, index) => {
-    return {
-      todo: `待办事项 ${index}`,
-      memo: `备注说明文案 ${index}`,
-      validity: '2017-12-12',
-    };
-  });
-};
 
 export default class EditableTable extends Component {
   static displayName = 'EditableTable';
@@ -24,69 +15,67 @@ export default class EditableTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: generatorData(),
+      visible: false,
     };
-    console.log(this.state.dataSource);
   }
 
-  renderOrder = (value, index) => {
-    return <span>{index}</span>;
-  };
-
-  deleteItem = (index) => {
-    this.state.dataSource.splice(index, 1);
-    this.setState({
-      dataSource: this.state.dataSource,
-    });
-  };
-
-  renderOperation = (value, index) => {
+  renderOperation = (value, index, item) => {
+    console.log(value, index, item);
     return (
-      <Button onClick={this.deleteItem.bind(this, index)} shape="text">
-        删除
-      </Button>
+      <div>
+        <Button onClick={this.props.deleteBooks.bind(this, item.id)} shape="text">
+          删除
+        </Button>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <Button onClick={this.showQrcode.bind(this, item.id)} shape="text">
+          二维码
+        </Button>
+      </div>
     );
   };
 
-  changeDataSource = (index, valueKey, value) => {
-    this.props.data[index][valueKey] = value;
+  showQrcode = (id) => {
     this.setState({
-      dataSource: this.state.dataSource,
+      visible: true,
+    }, () => {
+      setTimeout(() => {
+        const qrcode = new QRCode(document.getElementById('qrcode'), {
+          text: `http://library.iscode.cn/#/borrow?id=${id}`,
+          width: 128,
+          height: 128,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          // correctLevel: QRCode.CorrectLevel.H,
+        });
+      }, 1);
     });
-  };
+  }
 
   renderEditor = (valueKey, value, index, record) => {
-    console.log(valueKey, value, index, record);
     return (
       <CellEditor
         valueKey={valueKey}
-        index={index}
+        id={record.id}
         value={record[valueKey]}
-        onChange={this.changeDataSource}
+        onChange={this.props.editBooks}
+        allowEdit={valueKey !== 'id'}
       />
     );
   };
 
-  // addNewItem = () => {
-  //   this.state.dataSource.push({
-  //     todo: '暂无',
-  //     memo: '暂无',
-  //     validity: '暂无',
-  //   });
-  //   this.setState({
-  //     dataSource: this.state.dataSource,
-  //   });
-  // };
+  onClose = () => {
+    this.setState({
+      visible: false,
+    });
+  };
 
   render() {
-    console.log('test', this.props.data);
     return (
       <div className="editable-table">
         <IceContainer>
           <Table dataSource={this.props.data} hasBorder={false}>
-            {/* <Table.Column width={80} title="顺序" cell={this.renderOrder} /> */}
             <Table.Column
-              width={80}
+              width={100}
               title="序号"
               cell={this.renderEditor.bind(this, 'id')}
             />
@@ -106,12 +95,12 @@ export default class EditableTable extends Component {
               cell={this.renderEditor.bind(this, 'publisher')}
             />
             <Table.Column
-              width={80}
+              width={100}
               title="馆藏"
               cell={this.renderEditor.bind(this, 'total_number')}
             />
             <Table.Column
-              width={80}
+              width={100}
               title="在馆"
               cell={this.renderEditor.bind(this, 'available_number')}
             />
@@ -121,15 +110,25 @@ export default class EditableTable extends Component {
               cell={this.renderEditor.bind(this, 'date')}
             />
             <Table.Column
-              width={80}
+              width={100}
               title="价格"
               cell={this.renderEditor.bind(this, 'price')}
             />
-            <Table.Column title="操作" width={80} cell={this.renderOperation} />
+            <Table.Column title="操作" width={180} cell={this.renderOperation} />
           </Table>
           {/* <div onClick={this.addNewItem} style={styles.addNewItem}>
             + 新增一行
           </div> */}
+          <Overlay
+            visible={this.state.visible}
+            hasMask
+            disableScroll
+            align="cc cc"
+            safeNode={() => this.refs.target}
+            onRequestClose={this.onClose.bind(this)}
+          >
+            <div id="qrcode" />
+          </Overlay>
         </IceContainer>
       </div>
     );
